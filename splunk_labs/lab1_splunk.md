@@ -1,8 +1,9 @@
 # Splunk  Lab 1 - SSH Attack Dashboard
 In this lab, I used Splunk to analyze SSH authentication logs (`secure.log`) and learn SIEM basics. 
 The purpose was to understand how brute force login attempts appear in logs, practice SPL searches, 
-and build a dashboard that summarizes usernames, source IPs, and login outcomes (failed vs accepted).  
-
+and build a dashboard that summarizes usernames, source IPs, and login outcomes (failed vs accepted).
+This exercise is similar to what a real SOC analyst might do when investigating brute-force attempts on a production server.
+---
 ## Queries
 
 ### Top Usernames in Failed Logins
@@ -46,24 +47,16 @@ The `timechart` command then shows counts of failed logins over time, grouped by
 Adding `limit=20` displays the top 20 IPs as individual lines, the rest grouped into “OTHER.”
 This chart shows which attacking IPs were active at different times.
 
-
 ## The Dashboard
 
 ![SSH Attack Dashboard](./screenshots/dashboard(1).png)
 ![SSH Attack Dashboard](./screenshots/dashboard(2).png)
 
 
-The dashboard pulls together multiple panels that tell the story of what happened in the brute force attack
-captured in the `secure.log` file. The "Top Usernames in Failed Logins" panel shows which
-accounts attackers targeted the most, with `root`, `admin`, and `operator` as th top three. 
-The "Top Source IPs in Failed Logins" panel shows the most aggressive IP addresses used
-in the attack. The "Failed vs Accepted Over Time" panel shows that failed login 
-attempts massively outnumbered accepted ones, which indicates brute force activity. 
-Lastly, the "Failed Logins by Source IP Over Time" panel shows how attacks were 
-spread out across many different IPs, most of them grouped into "OTHER", showing that 
-the attacker used a large distributed set of sources instead of relying on just one.
-Together, the Dashboard tell a clear story: this system was under a distributed brute force attack 
-where attackers tried many different usernames and IP addresses, but very few attempts succeeded.
+- Top Usernames → showed attackers targeted root/admin/operator.
+- Top IPs → showed multiple IPs, suggesting distributed brute-force.
+- Failed vs Accepted → proved brute-force activity (overwhelming failures).
+- IPs over time → attacks were sustained, not just a single burst.
 
 
 ## What did I learn
@@ -72,6 +65,7 @@ where attackers tried many different usernames and IP addresses, but very few at
 - The attacker distributed their attack across a lot of different source IPs
 - I learned how to use `stats`, `top`, `timechart`, and `rex` to analyze logs
 - I learned how to save searches to a dashboard which makes it easier to see patterns
+- I can now quickly detect brute-force attacks in SSH logs using Splunk
 
 ## Conclusion
 This lab helped me build a foundation in Splunk searching, field extraction, and dashboards. 
